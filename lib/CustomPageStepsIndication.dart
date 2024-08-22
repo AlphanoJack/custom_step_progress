@@ -14,6 +14,7 @@ class StepProgress extends StatefulWidget {
   final Color finishButtonColor;
   final double buttonHeight;
   final bool enableFinishButtonGlow;
+  final EdgeInsets padding;
 
   const StepProgress({
     Key? key,
@@ -28,6 +29,7 @@ class StepProgress extends StatefulWidget {
     this.finishButtonColor = Colors.blue,
     this.buttonHeight = 50.0,
     this.enableFinishButtonGlow = true,
+    this.padding = const EdgeInsets.symmetric(horizontal: 16),
   }) : super(key: key);
 
   @override
@@ -118,18 +120,21 @@ class _StepProgressState extends State<StepProgress> with TickerProviderStateMix
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        SquareStepIndicator(
-          currentStep: widget.currentStep,
-          totalSteps: widget.totalSteps,
-          activeColor: widget.activeColor,
-          inactiveColor: widget.inactiveColor,
-        ),
-        const SizedBox(height: 16),
-        _buildButtons(),
-      ],
+    return Padding(
+      padding: widget.padding,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SquareStepIndicator(
+            currentStep: widget.currentStep,
+            totalSteps: widget.totalSteps,
+            activeColor: widget.activeColor,
+            inactiveColor: widget.inactiveColor,
+          ),
+          const SizedBox(height: 16),
+          _buildButtons(),
+        ],
+      ),
     );
   }
 
@@ -137,15 +142,12 @@ class _StepProgressState extends State<StepProgress> with TickerProviderStateMix
     return LayoutBuilder(
       builder: (context, constraints) {
         final screenWidth = constraints.maxWidth;
-        const horizontalPadding = 16.0;
         const buttonSpacing = 8.0;
 
         return AnimatedBuilder(
           animation: _animation,
           builder: (context, child) {
             final backButtonWidth = _animation.value * (screenWidth * 0.25);
-            final continueButtonWidth = screenWidth - backButtonWidth -
-                (2 * horizontalPadding) - buttonSpacing;
             final isLastStep = widget.currentStep == widget.totalSteps - 1;
 
             return Row(
@@ -163,6 +165,7 @@ class _StepProgressState extends State<StepProgress> with TickerProviderStateMix
                       style: ElevatedButton.styleFrom(
                         backgroundColor: widget.backButtonColor,
                         foregroundColor: Colors.white,
+                        padding: EdgeInsets.zero,
                       ),
                       child: Text(
                         widget.currentStep == 0 ? '' : 'Back',
@@ -172,8 +175,8 @@ class _StepProgressState extends State<StepProgress> with TickerProviderStateMix
                     ),
                   ),
                 ),
-                const SizedBox(width: buttonSpacing),
-                _buildContinueButton(isLastStep, continueButtonWidth),
+                if (widget.currentStep > 0) const SizedBox(width: buttonSpacing),
+                Expanded(child: _buildContinueButton(isLastStep)),
               ],
             );
           },
@@ -182,7 +185,7 @@ class _StepProgressState extends State<StepProgress> with TickerProviderStateMix
     );
   }
 
-  Widget _buildContinueButton(bool isLastStep, double width) {
+  Widget _buildContinueButton(bool isLastStep) {
     return AnimatedBuilder(
       animation: _rotationAnimation,
       builder: (context, child) {
@@ -214,7 +217,7 @@ class _StepProgressState extends State<StepProgress> with TickerProviderStateMix
                   // Base button
                   AnimatedContainer(
                     duration: const Duration(milliseconds: 200),
-                    width: width,
+                    width: double.infinity,
                     height: widget.buttonHeight,
                     child: ElevatedButton(
                       onPressed: isLastStep ? null : () =>
