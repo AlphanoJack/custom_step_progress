@@ -48,5 +48,3 @@ You can customize the following properties:
 ![sample](https://github.com/user-attachments/assets/3ea286a1-0f86-4426-8604-28c171c6c32f)
 
 
-
-<video alt="sample" width="240" src=https://github.com/user-attachments/assets/ae204cb7-218f-4ac2-ae40-85e5a6c9d526>
