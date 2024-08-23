@@ -2,7 +2,7 @@ name: flutter_custom_page_steps_indication
 description: A customizable step progress widget for Flutter applications.
 version: 1.0.0
 homepage: https://github.com/AlphanoJack/custom_step_indercation
-license: MIT
+license: BSD 3-Clause License
 
 
 environment:
