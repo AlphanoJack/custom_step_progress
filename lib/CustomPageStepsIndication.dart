@@ -2,16 +2,24 @@ import 'package:flutter/material.dart';
 import 'dart:math' as math;
 import 'package:flutter_custom_page_steps_indication/StepIndicator.dart';
 
+Color hexToColor(String hexString) {
+  final buffer = StringBuffer();
+  if (hexString.length == 6 || hexString.length == 7) buffer.write('ff');
+  buffer.write(hexString.replaceFirst('#', ''));
+  return Color(int.parse(buffer.toString(), radix: 16));
+}
+
 class StepProgress extends StatefulWidget {
   final int currentStep;
   final int totalSteps;
   final Function(int) onNext;
   final Function(int) onBack;
-  final Color activeColor;
-  final Color inactiveColor;
-  final Color backButtonColor;
-  final Color continueButtonColor;
-  final Color finishButtonColor;
+  final Function() onFinish; // New callback for Finish action
+  final String activeColor;
+  final String inactiveColor;
+  final String backButtonColor;
+  final String continueButtonColor;
+  final String finishButtonColor;
   final double buttonHeight;
   final bool enableFinishButtonGlow;
   final EdgeInsets padding;
@@ -22,11 +30,12 @@ class StepProgress extends StatefulWidget {
     required this.totalSteps,
     required this.onNext,
     required this.onBack,
-    this.activeColor = Colors.green,
-    this.inactiveColor = Colors.grey,
-    this.backButtonColor = Colors.black,
-    this.continueButtonColor = Colors.green,
-    this.finishButtonColor = Colors.blue,
+    required this.onFinish, // New required parameter
+    this.activeColor = "00FF00",
+    this.inactiveColor = "808080",
+    this.backButtonColor = "000000",
+    this.continueButtonColor = "00FF00",
+    this.finishButtonColor = "0000FF",
     this.buttonHeight = 50.0,
     this.enableFinishButtonGlow = true,
     this.padding = const EdgeInsets.symmetric(horizontal: 16),
@@ -128,8 +137,8 @@ class _StepProgressState extends State<StepProgress> with TickerProviderStateMix
           SquareStepIndicator(
             currentStep: widget.currentStep,
             totalSteps: widget.totalSteps,
-            activeColor: widget.activeColor,
-            inactiveColor: widget.inactiveColor,
+            activeColor: hexToColor(widget.activeColor),
+            inactiveColor: hexToColor(widget.inactiveColor),
           ),
           const SizedBox(height: 16),
           _buildButtons(),
@@ -163,7 +172,7 @@ class _StepProgressState extends State<StepProgress> with TickerProviderStateMix
                       onPressed: _animation.value > 0 ? () =>
                           widget.onBack(widget.currentStep) : null,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: widget.backButtonColor,
+                        backgroundColor: hexToColor(widget.backButtonColor),
                         foregroundColor: Colors.white,
                         padding: EdgeInsets.zero,
                       ),
@@ -197,7 +206,6 @@ class _StepProgressState extends State<StepProgress> with TickerProviderStateMix
             builder: (context, child) {
               return Stack(
                 children: [
-                  // Glow effect (if enabled)
                   if (isLastStep && widget.enableFinishButtonGlow)
                     Positioned.fill(
                       child: Container(
@@ -205,30 +213,29 @@ class _StepProgressState extends State<StepProgress> with TickerProviderStateMix
                           borderRadius: BorderRadius.circular(40),
                           gradient: LinearGradient(
                             colors: [
-                              widget.finishButtonColor.withOpacity(0.6),
-                              widget.finishButtonColor,
-                              widget.finishButtonColor.withOpacity(0.6),
+                              hexToColor(widget.finishButtonColor).withOpacity(0.6),
+                              hexToColor(widget.finishButtonColor),
+                              hexToColor(widget.finishButtonColor).withOpacity(0.6),
                             ],
                             stops: [0, _glowAnimation.value, 1],
                           ),
                         ),
                       ),
                     ),
-                  // Base button
                   AnimatedContainer(
                     duration: const Duration(milliseconds: 200),
                     width: double.infinity,
                     height: widget.buttonHeight,
                     child: ElevatedButton(
-                      onPressed: isLastStep ? null : () =>
-                          widget.onNext(widget.currentStep),
+                      onPressed: isLastStep ? widget.onFinish : () => widget.onNext(widget.currentStep),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: isLastStep
-                            ? widget.finishButtonColor
-                            : widget.continueButtonColor,
+                            ? hexToColor(widget.finishButtonColor)
+                            : hexToColor(widget.continueButtonColor),
                         foregroundColor: Colors.white,
                         disabledBackgroundColor: widget.enableFinishButtonGlow
-                            ? widget.finishButtonColor.withOpacity(0.2) : widget.finishButtonColor,
+                            ? hexToColor(widget.finishButtonColor).withOpacity(0.2)
+                            : hexToColor(widget.finishButtonColor),
                         disabledForegroundColor: Colors.white,
                         elevation: 0,
                         shape: RoundedRectangleBorder(
@@ -240,7 +247,7 @@ class _StepProgressState extends State<StepProgress> with TickerProviderStateMix
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          color: Colors.white, // Explicitly set text color
+                          color: Colors.white,
                         ),
                       ),
                     ),
@@ -254,4 +261,3 @@ class _StepProgressState extends State<StepProgress> with TickerProviderStateMix
     );
   }
 }
-

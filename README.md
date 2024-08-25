@@ -1,4 +1,4 @@
-# custom_step_indercation
+# custom_step_progress
 
 Flutter Step Progress is a customizable widget for displaying step-by-step progress in Flutter applications.
 It provides an intuitive interface for multi-step processes or forms.
