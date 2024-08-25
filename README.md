@@ -15,8 +15,7 @@ Installation
 
 Add this to your package's "pubspec.yaml" file:
 
-<img alt="sample" width="700" src=https://github.com/user-attachments/assets/22da6484-5a32-4495-b56f-7eee7b382165>
-
+<img alt="sample" width="700" src=https://github.com/user-attachments/assets/ee6e69ec-b63d-4f38-a6e1-08a2a1948dfb>
 
 Then run:
 
@@ -30,7 +29,7 @@ Import the package in your Dart code:
 
 Then, you can use the "StepProgress" widget in your Flutter app:
 
-<img alt="sample" width="700" src=https://github.com/user-attachments/assets/77a83b6d-d65a-4f70-9924-395fc63500d4>
+<img alt="sample" width="700" src=https://github.com/user-attachments/assets/46439b90-876d-408a-9886-c5d6936167a9>
 
 #Customization
 You can customize the following properties:
