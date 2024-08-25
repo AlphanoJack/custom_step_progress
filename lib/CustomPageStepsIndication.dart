@@ -24,11 +24,11 @@ class StepProgress extends StatefulWidget {
   final Function(int) onNext;
   final Function(int) onBack;
   final Function() onFinish; // New callback for Finish action
-  final String activeColor;
-  final String inactiveColor;
-  final String backButtonColor;
-  final String continueButtonColor;
-  final String finishButtonColor;
+  final dynamic activeColor;
+  final dynamic inactiveColor;
+  final dynamic backButtonColor;
+  final dynamic continueButtonColor;
+  final dynamic finishButtonColor;
   final double buttonHeight;
   final bool enableFinishButtonGlow;
   final EdgeInsets padding;
