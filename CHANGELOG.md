@@ -17,3 +17,9 @@
 ### Added
 - Added License 
 
+## 1.1.0 - 2024-08-23
+
+### Added
+- Add hex color support
+- Implement a finish button callback function
+
