@@ -2,12 +2,21 @@ import 'package:flutter/material.dart';
 import 'dart:math' as math;
 import 'package:flutter_custom_page_steps_indication/StepIndicator.dart';
 
-Color hexToColor(String hexString) {
-  final buffer = StringBuffer();
-  if (hexString.length == 6 || hexString.length == 7) buffer.write('ff');
-  buffer.write(hexString.replaceFirst('#', ''));
-  return Color(int.parse(buffer.toString(), radix: 16));
+Color parseColor(dynamic color) {
+  if (color is int) {
+    return Color(color);
+  } else if (color is String) {
+    String hexColor = color.replaceAll("#", "");
+    if (hexColor.length == 6) {
+      hexColor = "FF" + hexColor;
+    }
+    return Color(int.parse(hexColor, radix: 16));
+  } else if (color is Color) {
+    return color;
+  }
+  throw ArgumentError('Invalid color format');
 }
+
 
 class StepProgress extends StatefulWidget {
   final int currentStep;
@@ -137,8 +146,8 @@ class _StepProgressState extends State<StepProgress> with TickerProviderStateMix
           SquareStepIndicator(
             currentStep: widget.currentStep,
             totalSteps: widget.totalSteps,
-            activeColor: hexToColor(widget.activeColor),
-            inactiveColor: hexToColor(widget.inactiveColor),
+            activeColor: parseColor(widget.activeColor),
+            inactiveColor: parseColor(widget.inactiveColor),
           ),
           const SizedBox(height: 16),
           _buildButtons(),
@@ -172,7 +181,7 @@ class _StepProgressState extends State<StepProgress> with TickerProviderStateMix
                       onPressed: _animation.value > 0 ? () =>
                           widget.onBack(widget.currentStep) : null,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: hexToColor(widget.backButtonColor),
+                        backgroundColor: parseColor(widget.backButtonColor),
                         foregroundColor: Colors.white,
                         padding: EdgeInsets.zero,
                       ),
@@ -213,9 +222,9 @@ class _StepProgressState extends State<StepProgress> with TickerProviderStateMix
                           borderRadius: BorderRadius.circular(40),
                           gradient: LinearGradient(
                             colors: [
-                              hexToColor(widget.finishButtonColor).withOpacity(0.6),
-                              hexToColor(widget.finishButtonColor),
-                              hexToColor(widget.finishButtonColor).withOpacity(0.6),
+                              parseColor(widget.finishButtonColor).withOpacity(0.6),
+                              parseColor(widget.finishButtonColor),
+                              parseColor(widget.finishButtonColor).withOpacity(0.6),
                             ],
                             stops: [0, _glowAnimation.value, 1],
                           ),
@@ -230,12 +239,12 @@ class _StepProgressState extends State<StepProgress> with TickerProviderStateMix
                       onPressed: isLastStep ? widget.onFinish : () => widget.onNext(widget.currentStep),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: isLastStep
-                            ? hexToColor(widget.finishButtonColor)
-                            : hexToColor(widget.continueButtonColor),
+                            ? parseColor(widget.finishButtonColor)
+                            : parseColor(widget.continueButtonColor),
                         foregroundColor: Colors.white,
                         disabledBackgroundColor: widget.enableFinishButtonGlow
-                            ? hexToColor(widget.finishButtonColor).withOpacity(0.2)
-                            : hexToColor(widget.finishButtonColor),
+                            ? parseColor(widget.finishButtonColor).withOpacity(0.2)
+                            : parseColor(widget.finishButtonColor),
                         disabledForegroundColor: Colors.white,
                         elevation: 0,
                         shape: RoundedRectangleBorder(
