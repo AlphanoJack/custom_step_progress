@@ -27,3 +27,8 @@
 
 ### Added
 - Add support both hexadecimal string colors
+
+## 1.1.2 - 2024-08-26
+
+### Changed
+- changed package name to custom_step_progress
