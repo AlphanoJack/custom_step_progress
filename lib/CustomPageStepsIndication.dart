@@ -1,6 +1,6 @@
+import 'package:custom_step_progress/StepIndicator.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
-import 'package:flutter_custom_page_steps_indication/StepIndicator.dart';
 
 Color parseColor(dynamic color) {
   if (color is int) {
